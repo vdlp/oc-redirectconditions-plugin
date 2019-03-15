@@ -1,3 +1,5 @@
 1.0.0:
     - First version of Vdlp.RedirectConditions
     - 20190201_0001_create_tables.php
+1.0.1:
+    - Update plugin name and author
