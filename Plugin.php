@@ -33,9 +33,9 @@ class Plugin extends PluginBase
     public function pluginDetails(): array
     {
         return [
-            'name' => 'Redirect Condition',
+            'name' => 'Redirect Conditions',
             'description' => 'Allows plugin developers to create Redirect Condition extension plugins.',
-            'author' => 'Alwin Drenth',
+            'author' => 'Van der Let & Partners',
             'icon' => 'icon-link',
             'homepage' => 'https://octobercms.com/plugin/vdlp-redirect',
         ];
