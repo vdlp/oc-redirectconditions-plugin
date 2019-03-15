@@ -1,0 +1,14 @@
+{
+    "name": "vdlp/oc-redirectconditions-plugin",
+    "description": "Allows developers to create their own Redirect Conditions extension plugins for OctoberCMS.",
+    "type": "october-plugin",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Van der Let & Partners",
+            "email": "octobercms@vdlp.nl"
+        }
+    ],
+    "require": {
+    }
+}
