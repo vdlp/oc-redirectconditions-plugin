@@ -54,6 +54,11 @@ class Plugin extends PluginBase
                 ConditionParameter::class,
                 'table' => 'vdlp_redirectconditions_condition_parameters',
             ];
+            $redirect->bindEvent('model.afterSave', function() use ($redirect) {
+                /** @var \Illuminate\Contracts\Events\Dispatcher $dispatcher */
+                $dispatcher = resolve(\Illuminate\Contracts\Events\Dispatcher::class);
+                $dispatcher->dispatch('vdlp.redirect.afterRedirectSave', ['redirect' => $redirect]);
+            });
         });
 
         Event::listen('vdlp.redirect.afterRedirectSave', function (Redirect\Models\Redirect $redirect) {
