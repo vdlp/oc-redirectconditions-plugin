@@ -3,3 +3,6 @@
     - 20190201_0001_create_tables.php
 1.0.1:
     - Update plugin name and author
+1.1.0:
+    - Add fix for deleted event (thanks to @NickolayCh)
+    - Minimal version of PHP required is 7.1
