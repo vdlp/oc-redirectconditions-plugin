@@ -6,6 +6,7 @@ namespace Vdlp\RedirectConditions;
 
 use Backend\Classes\FormTabs;
 use Backend\Widgets\Form;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Facades\Event;
 use System\Classes\PluginBase;
 use Vdlp\Redirect;
@@ -41,7 +42,6 @@ class Plugin extends PluginBase
         ];
     }
 
-
     /** @noinspection PhpMissingParentCallCommonInspection */
 
     /**
@@ -54,9 +54,15 @@ class Plugin extends PluginBase
                 ConditionParameter::class,
                 'table' => 'vdlp_redirectconditions_condition_parameters',
             ];
+
+            $redirect->bindEvent('model.afterSave', static function () use ($redirect) {
+                /** @var Dispatcher $dispatcher */
+                $dispatcher = resolve(Dispatcher::class);
+                $dispatcher->dispatch('vdlp.redirect.afterRedirectSave', ['redirect' => $redirect]);
+            });
         });
 
-        Event::listen('vdlp.redirect.afterRedirectSave', function (Redirect\Models\Redirect $redirect) {
+        Event::listen('vdlp.redirect.afterRedirectSave', static function (Redirect\Models\Redirect $redirect) {
             /** @var Redirect\Classes\Contracts\RedirectManagerInterface $manager */
             $manager = resolve(Redirect\Classes\Contracts\RedirectManagerInterface::class);
 
