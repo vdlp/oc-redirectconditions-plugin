@@ -8,16 +8,8 @@ use Carbon\Carbon;
 use Vdlp\Redirect\Classes\RedirectRule;
 use Vdlp\Redirect\Models\Redirect;
 
-/**
- * Class RedirectRuleFactory
- *
- * @package Vdlp\RedirectConditions\Tests\Factories
- */
 class RedirectRuleFactory
 {
-    /**
-     * @return RedirectRule
-     */
     public static function createRedirectRule(): RedirectRule
     {
         return new RedirectRule([

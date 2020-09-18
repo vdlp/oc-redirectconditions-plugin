@@ -6,3 +6,5 @@
 1.1.0:
     - Add fix for deleted event (thanks to @NickolayCh)
     - Minimal version of PHP required is 7.1
+1.1.1:
+    - Fix save events which causes redirect condition parameters to be emptied.

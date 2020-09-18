@@ -1,25 +1,20 @@
 <?php
 
+/** @noinspection AutoloadingIssuesInspection */
+
 declare(strict_types=1);
 
 namespace Vdlp\RedirectConditions\Updates;
 
 use Illuminate\Database\Schema\Blueprint;
 use October\Rain\Database\Updates\Migration;
-use Schema;
+use October\Rain\Support\Facades\Schema;
 
-/** @noinspection AutoloadingIssuesInspection */
-
-/**
- * Class CreateTables
- *
- * @package Vdlp\Redirect\Updates
- */
 class CreateTables extends Migration
 {
-    public function up()
+    public function up(): void
     {
-        Schema::create('vdlp_redirectconditions_condition_parameters', function (Blueprint $table) {
+        Schema::create('vdlp_redirectconditions_condition_parameters', static function (Blueprint $table) {
             // Table configuration
             $table->engine = 'InnoDB';
 
@@ -46,12 +41,10 @@ class CreateTables extends Migration
         });
     }
 
-    public function down()
+    public function down(): void
     {
         Schema::disableForeignKeyConstraints();
-
         Schema::dropIfExists('vdlp_redirectconditions_condition_parameters');
-
         Schema::enableForeignKeyConstraints();
     }
 }

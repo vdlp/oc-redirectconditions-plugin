@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection PhpMissingParentCallCommonInspection */
+
 declare(strict_types=1);
 
 namespace Vdlp\RedirectConditions;
@@ -8,29 +10,17 @@ use Backend\Classes\FormTabs;
 use Backend\Widgets\Form;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Facades\Event;
+use October\Rain\Foundation\Application;
 use System\Classes\PluginBase;
 use Vdlp\Redirect;
 use Vdlp\RedirectConditions\Models\ConditionParameter;
 
-/**
- * Class Plugin
- *
- * @package Vdlp\RedirectConditions
- */
 class Plugin extends PluginBase
 {
-    /**
-     * {@inheritdoc}
-     */
     public $require = [
         'Vdlp.Redirect',
     ];
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
-
-    /**
-     * {@inheritdoc}
-     */
     public function pluginDetails(): array
     {
         return [
@@ -42,12 +32,7 @@ class Plugin extends PluginBase
         ];
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
-
-    /**
-     * {@inheritdoc}
-     */
-    public function register()
+    public function register(): void
     {
         Redirect\Models\Redirect::extend(function (Redirect\Models\Redirect $redirect) {
             $redirect->hasMany['conditionParameters'] = [
@@ -63,6 +48,10 @@ class Plugin extends PluginBase
         });
 
         Event::listen('vdlp.redirect.afterRedirectSave', static function (Redirect\Models\Redirect $redirect) {
+            if (!Application::getInstance()->runningInBackend()) {
+                return;
+            }
+
             /** @var Redirect\Classes\Contracts\RedirectManagerInterface $manager */
             $manager = resolve(Redirect\Classes\Contracts\RedirectManagerInterface::class);
 
