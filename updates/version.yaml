@@ -8,3 +8,5 @@
     - Minimal version of PHP required is 7.1
 1.1.1:
     - Fix save events which causes redirect condition parameters to be emptied.
+1.1.2:
+    - Update README
