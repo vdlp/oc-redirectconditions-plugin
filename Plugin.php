@@ -1,5 +1,7 @@
 <?php
 
+/** @noinspection PhpMissingParentCallCommonInspection */
+
 declare(strict_types=1);
 
 namespace Vdlp\RedirectConditions;
@@ -13,25 +15,12 @@ use System\Classes\PluginBase;
 use Vdlp\Redirect;
 use Vdlp\RedirectConditions\Models\ConditionParameter;
 
-/**
- * Class Plugin
- *
- * @package Vdlp\RedirectConditions
- */
 class Plugin extends PluginBase
 {
-    /**
-     * {@inheritdoc}
-     */
     public $require = [
         'Vdlp.Redirect',
     ];
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
-
-    /**
-     * {@inheritdoc}
-     */
     public function pluginDetails(): array
     {
         return [
@@ -43,12 +32,7 @@ class Plugin extends PluginBase
         ];
     }
 
-    /** @noinspection PhpMissingParentCallCommonInspection */
-
-    /**
-     * {@inheritdoc}
-     */
-    public function register()
+    public function register(): void
     {
         Redirect\Models\Redirect::extend(function (Redirect\Models\Redirect $redirect) {
             $redirect->hasMany['conditionParameters'] = [
