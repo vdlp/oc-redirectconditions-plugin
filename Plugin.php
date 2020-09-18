@@ -8,6 +8,7 @@ use Backend\Classes\FormTabs;
 use Backend\Widgets\Form;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Facades\Event;
+use October\Rain\Foundation\Application;
 use System\Classes\PluginBase;
 use Vdlp\Redirect;
 use Vdlp\RedirectConditions\Models\ConditionParameter;
@@ -63,6 +64,10 @@ class Plugin extends PluginBase
         });
 
         Event::listen('vdlp.redirect.afterRedirectSave', static function (Redirect\Models\Redirect $redirect) {
+            if (!Application::getInstance()->runningInBackend()) {
+                return;
+            }
+
             /** @var Redirect\Classes\Contracts\RedirectManagerInterface $manager */
             $manager = resolve(Redirect\Classes\Contracts\RedirectManagerInterface::class);
 
