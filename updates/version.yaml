@@ -10,3 +10,5 @@
     - Fix save events which causes redirect condition parameters to be emptied.
 1.1.2:
     - Update README
+1.1.3:
+    - Update plugin dependencies
