@@ -1,7 +1,5 @@
 <?php
 
-/** @noinspection PhpMissingParentCallCommonInspection */
-
 declare(strict_types=1);
 
 namespace Vdlp\RedirectConditions;
@@ -15,7 +13,7 @@ use System\Classes\PluginBase;
 use Vdlp\Redirect;
 use Vdlp\RedirectConditions\Models\ConditionParameter;
 
-class Plugin extends PluginBase
+final class Plugin extends PluginBase
 {
     public $require = [
         'Vdlp.Redirect',
@@ -34,20 +32,20 @@ class Plugin extends PluginBase
 
     public function register(): void
     {
-        Redirect\Models\Redirect::extend(function (Redirect\Models\Redirect $redirect) {
+        Redirect\Models\Redirect::extend(static function (Redirect\Models\Redirect $redirect): void {
             $redirect->hasMany['conditionParameters'] = [
-                ConditionParameter::class,
+                0 => ConditionParameter::class,
                 'table' => 'vdlp_redirectconditions_condition_parameters',
             ];
 
-            $redirect->bindEvent('model.afterSave', static function () use ($redirect) {
+            $redirect->bindEvent('model.afterSave', static function () use ($redirect): void {
                 /** @var Dispatcher $dispatcher */
                 $dispatcher = resolve(Dispatcher::class);
                 $dispatcher->dispatch('vdlp.redirect.afterRedirectSave', ['redirect' => $redirect]);
             });
         });
 
-        Event::listen('vdlp.redirect.afterRedirectSave', static function (Redirect\Models\Redirect $redirect) {
+        Event::listen('vdlp.redirect.afterRedirectSave', static function (Redirect\Models\Redirect $redirect): void {
             if (!Application::getInstance()->runningInBackend()) {
                 return;
             }
@@ -86,7 +84,7 @@ class Plugin extends PluginBase
             }
         });
 
-        Event::listen('backend.form.extendFields', function (Form $form) {
+        Event::listen('backend.form.extendFields', static function (Form $form): void {
             if (!$form->getController() instanceof Redirect\Controllers\Redirects) {
                 return;
             }
@@ -113,7 +111,7 @@ class Plugin extends PluginBase
                         'tab' => Redirect\Classes\Contracts\RedirectConditionInterface::TAB_NAME,
                         'type' => 'checkbox',
                         'comment' => $condition->getExplanation(),
-                    ]
+                    ],
                 ], FormTabs::SECTION_PRIMARY);
 
                 foreach ($condition->getFormConfig() as $formFieldKey => $formField) {
@@ -126,7 +124,7 @@ class Plugin extends PluginBase
                     $formField['trigger'] = [
                         'action' => 'show',
                         'field' => $formParentFieldKey,
-                        'condition' => 'checked'
+                        'condition' => 'checked',
                     ];
 
                     $formField['cssClass'] = 'field-indent';
