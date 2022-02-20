@@ -16,7 +16,7 @@ abstract class Condition implements RedirectConditionInterface
             ->where('condition_code', '=', $this->getCode())
             ->first();
 
-        if ($conditionParameter) {
+        if ($conditionParameter !== null) {
             if ($conditionParameter->getAttribute('is_enabled') === null) {
                 return [];
             }

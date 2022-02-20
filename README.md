@@ -33,17 +33,10 @@ Each redirect condition must have:
 
 ## Requirements
 
-- The `Vdlp.Redirect` plugin
-- PHP 7.1 or higher
+- The `Vdlp.Redirect` plugin.
+- PHP 7.4 or higher.
+- October CMS 2.1 or higher.
 
 ## Example
 
 This plugin contains an detailed implementation example (plugin). This plugin can be found at [GitHub](https://github.com/vdlp/oc-redirectconditionsexample-plugin).
-
-## Unit tests
-
-To run the Unit Tests of this plugin, execute the following command from the project root:
-
-```
-vendor/bin/phpunit plugins/vdlp/redirectconditions
-```

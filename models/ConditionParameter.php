@@ -9,15 +9,15 @@ use Vdlp\Redirect\Models\Redirect;
 
 class ConditionParameter extends Model
 {
+    public $belongsTo = [
+        'redirect' => Redirect::class,
+    ];
+
     protected $table = 'vdlp_redirectconditions_condition_parameters';
 
     protected $guarded = [];
 
-    public $belongsTo = [
-        'redirect' => Redirect::class
-    ];
-
     protected $jsonable = [
-        'parameters'
+        'parameters',
     ];
 }
