@@ -1,20 +1,18 @@
 <?php
 
-/** @noinspection AutoloadingIssuesInspection */
-
 declare(strict_types=1);
 
 namespace Vdlp\RedirectConditions\Updates;
 
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use October\Rain\Database\Updates\Migration;
-use October\Rain\Support\Facades\Schema;
 
 class CreateTables extends Migration
 {
     public function up(): void
     {
-        Schema::create('vdlp_redirectconditions_condition_parameters', static function (Blueprint $table) {
+        Schema::create('vdlp_redirectconditions_condition_parameters', static function (Blueprint $table): void {
             // Table configuration
             $table->engine = 'InnoDB';
 
@@ -36,7 +34,7 @@ class CreateTables extends Migration
             // Indices
             $table->unique([
                 'redirect_id',
-                'condition_code'
+                'condition_code',
             ], 'vdlp_redirectconditions_unique');
         });
     }
