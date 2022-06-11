@@ -10,7 +10,10 @@ use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Facades\Event;
 use October\Rain\Foundation\Application;
 use System\Classes\PluginBase;
-use Vdlp\Redirect;
+use Vdlp\Redirect\Classes\Contracts\RedirectConditionInterface;
+use Vdlp\Redirect\Classes\Contracts\RedirectManagerInterface;
+use Vdlp\Redirect\Controllers\Redirects;
+use Vdlp\Redirect\Models\Redirect;
 use Vdlp\RedirectConditions\Models\ConditionParameter;
 
 final class Plugin extends PluginBase
@@ -32,7 +35,7 @@ final class Plugin extends PluginBase
 
     public function register(): void
     {
-        Redirect\Models\Redirect::extend(static function (Redirect\Models\Redirect $redirect): void {
+        Redirect::extend(static function (Redirect $redirect): void {
             $redirect->hasMany['conditionParameters'] = [
                 0 => ConditionParameter::class,
                 'table' => 'vdlp_redirectconditions_condition_parameters',
@@ -45,29 +48,30 @@ final class Plugin extends PluginBase
             });
         });
 
-        Event::listen('vdlp.redirect.afterRedirectSave', static function (Redirect\Models\Redirect $redirect): void {
+        Event::listen('vdlp.redirect.afterRedirectSave', static function (Redirect $redirect): void {
             if (!Application::getInstance()->runningInBackend()) {
                 return;
             }
 
-            /** @var Redirect\Classes\Contracts\RedirectManagerInterface $manager */
-            $manager = resolve(Redirect\Classes\Contracts\RedirectManagerInterface::class);
+            /** @var RedirectManagerInterface $manager */
+            $manager = resolve(RedirectManagerInterface::class);
 
             $postData = request()->get('Redirect', []);
 
+            /** @var string $condition */
             foreach ($manager->getConditions() as $condition) {
-                /** @var Redirect\Classes\Contracts\RedirectConditionInterface $condition */
-                $condition = app($condition);
+                /** @var RedirectConditionInterface $condition */
+                $condition = resolve($condition);
 
                 $formValues = array_get(
                     $postData,
-                    "_VdlpRedirectConditionParameters.{$condition->getCode()}",
+                    sprintf('_VdlpRedirectConditionParameters.%s', $condition->getCode()),
                     []
                 );
 
                 $isEnabled = (bool) array_get(
                     $postData,
-                    "_VdlpRedirectConditionEnabled.{$condition->getCode()}",
+                    sprintf('_VdlpRedirectConditionEnabled.%s', $condition->getCode()),
                     false
                 );
 
@@ -85,30 +89,27 @@ final class Plugin extends PluginBase
         });
 
         Event::listen('backend.form.extendFields', static function (Form $form): void {
-            if (!$form->getController() instanceof Redirect\Controllers\Redirects) {
+            if (!$form->getController() instanceof Redirects) {
                 return;
             }
 
-            if (!($form->model instanceof Redirect\Models\Redirect)) {
+            if (!($form->model instanceof Redirect)) {
                 return;
             }
 
-            /** @var Redirect\Classes\Contracts\RedirectManagerInterface $manager */
-            $manager = resolve(Redirect\Classes\Contracts\RedirectManagerInterface::class);
+            /** @var RedirectManagerInterface $manager */
+            $manager = resolve(RedirectManagerInterface::class);
 
             foreach ($manager->getConditions() as $condition) {
-                /** @var Redirect\Classes\Contracts\RedirectConditionInterface $condition */
-                $condition = app($condition);
+                /** @var RedirectConditionInterface $condition */
+                $condition = resolve($condition);
 
-                $formParentFieldKey = sprintf(
-                    '_VdlpRedirectConditionEnabled[%s]',
-                    $condition->getCode()
-                );
+                $formParentFieldKey = sprintf('_VdlpRedirectConditionEnabled[%s]', $condition->getCode());
 
                 $form->addFields([
                     $formParentFieldKey => [
                         'label' => $condition->getDescription(),
-                        'tab' => Redirect\Classes\Contracts\RedirectConditionInterface::TAB_NAME,
+                        'tab' => RedirectConditionInterface::TAB_NAME,
                         'type' => 'checkbox',
                         'comment' => $condition->getExplanation(),
                     ],
@@ -130,7 +131,7 @@ final class Plugin extends PluginBase
                     $formField['cssClass'] = 'field-indent';
 
                     $form->addFields([
-                        $formFieldKey => $formField
+                        $formFieldKey => $formField,
                     ], FormTabs::SECTION_PRIMARY);
                 }
             }
