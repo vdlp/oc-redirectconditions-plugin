@@ -10,9 +10,9 @@
         }
     ],
     "require": {
-        "php": "^8.0.2",
+        "php": "^8.2.0",
         "composer/installers": "^1.0 || ^2.0",
-        "october/rain": "^3.0",
+        "october/rain": "^4.0",
         "vdlp/oc-redirect-plugin": "^3.1"
     },
     "require-dev": {
