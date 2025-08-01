@@ -19,3 +19,6 @@ v1.3.0:
     - Minimal required October CMS version 3.0
     - Minimal version of PHP required is 8.0.1
 v1.3.1: "Maintenance release"
+v1.4.0:
+    - Minimal required October CMS version 4.0
+    - Minimal version of PHP required is 8.2.0
