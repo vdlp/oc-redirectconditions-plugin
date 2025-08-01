@@ -33,9 +33,9 @@ Each redirect condition must have:
 
 ## Requirements
 
-- The `Vdlp.Redirect` plugin.
-- PHP 8.0.2 or higher.
-- October CMS 3.0 or higher.
+- The `Vdlp.Redirect` plugin ^4.0.
+- PHP 8.2.0 or higher.
+- October CMS 4.0 or higher.
 
 ## Example
 
